@@ -1,0 +1,53 @@
+---
+title: "Income in NY"
+---
+
+```{r}
+library(tidyverse)
+library(tidycensus)
+```
+
+```{r}
+# Get household income data by census tract in New York
+
+ny_income <- get_acs(
+
+  geography = "tract",
+
+  variables = "B19013_001", # Median household income in the past 12 months
+
+  state = "NY",
+
+  year = 2020,
+
+  geometry = TRUE
+
+)
+
+ 
+
+# Rename the variable for better readability
+
+ny_income <- ny_income %>%
+
+  rename(median_income = estimate)
+
+ 
+
+# Plot the data
+
+ggplot(data = ny_income) +
+
+  geom_sf(aes(fill = median_income)) +
+
+  scale_fill_viridis_c(option = "viridis", na.value = "grey50", name = "Median Income") +
+
+  labs(title = "Median Household Income by Census Tract in New York",
+
+       subtitle = "Source: U.S. Census Bureau, 2020 ACS 5-Year Estimates",
+
+       caption = "Data retrieved using tidycensus") +
+
+  theme_minimal()
+```
+
